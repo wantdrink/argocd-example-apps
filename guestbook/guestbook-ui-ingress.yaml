@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: guestbook-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: pln-cd1-neu-svc1.ft1core.mcloud.entsvcs.net
+      http:
+        paths:
+          - backend:
+              service:
+                name: guestbook-ui
+                port:
+                  number: 80
+            path: /guestbook(/|$)(.*)
+            pathType: Prefix
+  tls:
+    - hosts:
+        - pln-cd1-neu-svc1.ft1core.mcloud.entsvcs.net
+      secretName: pln-cd1-guestbook
